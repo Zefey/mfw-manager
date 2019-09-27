@@ -3,21 +3,20 @@ import { BrowserRouter as Router, Route ,Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from '../components/Loading';
 
-const User = Loadable({
-  loader: () => import('../pages/user'),
+const Login = Loadable({
+  loader: () => import('../pages/Login'),
   loading: Loading
 });
 
-const Test = Loadable({
-  loader: () => import('../pages/test'),
+const Home = Loadable({
+  loader: () => import('../pages/Home'),
   loading: Loading
 });
 
 const NotFound = Loadable({
-  loader: () => import('../pages/error/404'),
+  loader: () => import('../pages/NotFound'),
   loading: Loading
 });
-
 
 export default class Container extends Component{
   
@@ -25,8 +24,8 @@ export default class Container extends Component{
     return(
     <Router>
       <Switch>
-        <Route path="/" exact={true} component={User}/>
-        <Route path="/test" exact={true} component={Test}/>
+        <Route path="/" exact={true} component={Login}/>
+        <Route path="/home" exact={true} component={Home}/>
         <Route component={NotFound}/>
       </Switch>
     </Router>

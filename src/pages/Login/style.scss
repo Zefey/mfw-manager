@@ -1,0 +1,31 @@
+#login .logo {
+    font-size: 68px;
+    line-height: 76px;
+    /* font-weight: 600; */
+    padding-bottom: 18px;
+    margin-top: 108px;
+}
+
+#login .logo .Z {
+    color: #ff4d4f;
+    font-size: 78px;
+    line-height: 88px;
+}
+#login .logo .E {
+    color: #faad14;
+}
+#login .logo .F {
+    color: #52c41a;
+}
+#login .logo .Y:last-child {
+    color: #1890ff;
+}
+#login .login-form {
+  width: 320px;
+}
+#login .login-form-forgot {
+  float: right;
+}
+#login .login-form-button {
+  width: 100%;
+}
