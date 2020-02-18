@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux'
 import { Layout, Menu, Breadcrumb, Icon,Button } from 'antd';
 import * as types from '../../constants/ActionTypes';
-import ArticleList from '../Article/ArticleList'
-import ArticleAdd from '../Article/ArticleAdd'
+import Banner from '../Banner'
 import {logoutAction} from '../../actions/LoginAction'
 import File from '../File'
 import './style.scss';
@@ -33,16 +32,14 @@ class Home extends Component{
 
     render(){
         let {menuKey} = this.state;
+        let username = sessionStorage.getItem('phone');
         let jsx = <div/>;
         switch (menuKey) {
             case '1':
                 jsx = <HomeItem setState={this._setState}/>;
                 break;
             case '2':
-                jsx = <ArticleList setState={this._setState}/>;
-                break;
-            case '3':
-                jsx = <ArticleAdd setState={this._setState}/>;
+                jsx = <Banner setState={this._setState}/>;
                 break;
             case '4':
                 jsx = <File setState={this._setState}/>;
@@ -54,11 +51,11 @@ class Home extends Component{
             <Layout id="home">
                 <Header className="header">
                   <div className="logo">
-                    <span style={{fontSize: '28px', color: '#fff'}}>Zefey</span>
+                    <span style={{fontSize: '28px', color: '#fff'}}>马蜂窝</span>
                   </div>
                   <div className="info" >
                     <Icon type="user" style={{fontSize: '18px', color: '#fff'}}/>
-                    <span style={{fontSize: '18px', color: '#fff',margin:10,marginRight:30}}>root</span>
+                    <span style={{fontSize: '18px', color: '#fff',margin:10,marginRight:30}}>{username}</span>
                     <Button onClick={this.logout} ghost>退出登录</Button>
                   </div>
                 </Header>
@@ -75,17 +72,17 @@ class Home extends Component{
                             onClick={this.handleClick}>
                           <Menu.Item key="1">
                             <Icon type="laptop" />
-                            <span>Home</span>
+                            <span>首页</span>
                           </Menu.Item>
-                          <SubMenu
-                            key="sub1"
-                            title={<span><Icon type="profile" /><span>Article</span></span>}>
-                            <Menu.Item key="2">List</Menu.Item>
-                            <Menu.Item key="3">Add</Menu.Item>
-                          </SubMenu>
+
+                          <Menu.Item key="2">
+                            <Icon type="appstore" />
+                            <span>Banner</span>
+                          </Menu.Item>
+
                           <Menu.Item key="4">
                             <Icon type="file" />
-                            <span>File</span>
+                            <span>文件</span>
                           </Menu.Item>
                         </Menu>
                   </Sider>
@@ -136,8 +133,8 @@ class HomeItem extends Component {
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Zefey</Breadcrumb.Item>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
+                <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
+                <Breadcrumb.Item>首页</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
                 Personal information.

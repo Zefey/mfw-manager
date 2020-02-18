@@ -31,27 +31,23 @@ class Login extends Component{
             <div id="login">
                 <Row type="flex" justify="center" align="top">
                     <div className="logo">
-                        <span className="Z">Z</span>
-                        <span className="E">e</span>
-                        <span className="F">f</span>
-                        <span className="E">e</span>
-                        <span className="Y">y</span>
+                        <span>后台管理系统</span>
                     </div>
                 </Row>
                 <Row type="flex" justify="center" align="middle">
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <FormItem>
-                          {getFieldDecorator('username', {
-                            rules: [{ required: true, message: 'Please input your username!' }],
+                          {getFieldDecorator('phone', {
+                            rules: [{ required: true, message: '请输入帐号!' }],
                           })(
-                            <Input prefix={<Icon type="user" style={{ fontSize: 16, color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" size="large"/>
+                            <Input prefix={<Icon type="user" style={{ fontSize: 16, color: 'rgba(0,0,0,.25)' }} />} placeholder="帐号" size="large"/>
                           )}
                         </FormItem>
                         <FormItem>
                           {getFieldDecorator('password', {
                             rules: [{ required: true, message: 'Please input your Password!' }],
                           })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 16, color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" size="large"/>
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 16, color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" size="large"/>
                           )}
                         </FormItem>
                         <FormItem>
@@ -61,10 +57,10 @@ class Login extends Component{
                           })(
 
                           )*/}
-                          <Checkbox checked>Remember me</Checkbox>
+                          <Checkbox checked>记住我</Checkbox>
                           {/* <a className="login-form-forgot" href="javascript:;">Forgot password</a> */}
                           <Button type="primary" htmlType="submit" className="login-form-button" size="large">
-                            Log in
+                            登录
                           </Button>
                           {/* Or <a href="javascript:;">register now!</a> */}
                         </FormItem>

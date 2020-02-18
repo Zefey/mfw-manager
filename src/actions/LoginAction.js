@@ -8,6 +8,7 @@ export function loginAction(reqData) {
         return Request.post(Config.login, reqData, (res) => {
             let {status} = res;
             if(status == 1){
+                sessionStorage.setItem('phone',reqData.phone);
                 dispatch(loginSuccess(res));
             }else{
                 dispatch(loginFail(res));

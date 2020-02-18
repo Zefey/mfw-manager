@@ -16,8 +16,8 @@ export default class File extends Component {
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Zefey</Breadcrumb.Item>
-                <Breadcrumb.Item>File</Breadcrumb.Item>
+                <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
+                <Breadcrumb.Item>文件</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
               <Dragger
@@ -29,8 +29,8 @@ export default class File extends Component {
                   <p className="ant-upload-drag-icon">
                     <Icon type="inbox" />
                   </p>
-                  <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                  <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+                  <p className="ant-upload-text">点击或拖拽文件到这个区域上传</p>
+                  <p className="ant-upload-hint">支持单个或批量上传文件</p>
               </Dragger>
               </Content>
             </Layout>

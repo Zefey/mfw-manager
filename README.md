@@ -1,2 +1,0 @@
-# blog-manager
-blog-manager

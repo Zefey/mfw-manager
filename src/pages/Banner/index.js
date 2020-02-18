@@ -3,99 +3,90 @@ import { connect } from 'react-redux'
 import showdown from 'showdown'
 import { Layout, Breadcrumb, Table, Row ,Col, Button,Divider,Modal,message,Select,Input,Tag } from 'antd';
 import * as types from '../../constants/ActionTypes';
-import {articleListAction,articleUpdateAction,articleDeleteAction} from '../../actions/ArticleAction'
-import {labelListAction} from '../../actions/LabelAction'
-import {categoryListAction} from '../../actions/CategoryAction'
-import 'github-markdown-css'
+import {bannerList,handleBanner,bannerDelete} from '../../actions/BannerAction'
 
 const { Content } = Layout;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-class ArticleList extends Component {
+class Banner extends Component {
     constructor(props){
         super(props);
         this.state = {
             data:[],
             visible:false,
-            confirmLoading:false,
-            title:'',
-            content:'',
-            HTML:'',
-            category:[],
-            label:[],
-            labelData:[],
-            categoryData:[]
-
+            confirmLoading:false
         }
     }
 
     componentDidMount(){
-        console.log('componentDidMount');
         this.init();
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('componentWillReceiveProps');
-        this.resolveLabel(nextProps.LabelReducer);
-        this.resolveCategory(nextProps.CategoryReducer);
-        this.resolveArticle(nextProps.ArticleReducer);
+        this.resolve(nextProps.BannerReducer);
     }
 
 
     render(){
-        let {data,visible,confirmLoading,labelData,categoryData,title,content,HTML,label,category} = this.state;
+        let {data,visible,confirmLoading,id} = this.state;
+        console.log('data',data);
         //表格结构
         const columns = [
             {
-                title: 'Action',
+                title: '操作',
                 dataIndex: 'action',
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                        <Button type="primary" onClick={()=>{this.showEditConfirm(record)}}>Edit</Button>
+                        <Button type="primary" onClick={()=>{this.showModal(record)}}>编辑</Button>
                         <Divider type="vertical" />
-                        <Button type="danger" onClick={()=>{this.showDeleteConfirm(record)}}>Delete</Button>
+                        <Button type="danger" onClick={()=>{this.showDeleteConfirm(record)}}>删除</Button>
                     </span>
                 )
             },{
-                title: 'Id',
+                title: 'id',
                 dataIndex: 'id',
                 key: 'id'
             },{
-                title: 'Title',
+                title: 'img',
+                dataIndex: 'img',
+                key: 'img',
+                render: (text, record) => (
+                    <img src={text} style={{height:'80px',width:'100px'}}/>
+                )
+            },{
+                title: 'location',
+                dataIndex: 'location',
+                key: 'location'
+            },{
+                title: 'type',
+                dataIndex: 'type',
+                key: 'type'
+            },{
+                title: 'title',
                 dataIndex: 'title',
                 key: 'title'
             },{
-                title: 'Last Modified',
-                dataIndex: 'time',
-                key: 'time'
-            },{
-                title: 'Category',
-                dataIndex: 'category',
-                key: 'category'
-            },{
-                title: 'Label',
-                dataIndex: 'label',
-                key: 'label',
-                render: (text, record) => (
-                    <span>
-                        {text.map(({id,name}) => <Tag color="blue" key={id}>{name}</Tag>)}
-                    </span>
-                )
+                title: 'url',
+                dataIndex: 'url',
+                key: 'url'
             }
         ]
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Article</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
+                <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
+                <Breadcrumb.Item>Banner</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
+                <Row type="flex" justify="start" align="middle" style={{height:50}}>
+                    <Button type="primary" onClick={this.showModal}>添加数据</Button>
+                  </Row>
                 <Table rowKey={record => record.id} columns={columns} dataSource={data} />
               </Content>
-              <Modal
-                title={"Edit"}
+              {/* <Modal
+                title={id?'新增数据':'编辑数据'}
                 style={{minWidth:'70%'}}
                 visible={visible}
                 onOk={this.handleOk}
@@ -147,54 +138,31 @@ class ArticleList extends Component {
                           style={{height:600}}
                           value={content}
                           placeholder="Input the MarkDown Text,That will be auto Transformation the HTML"
-                          onChange={this.handleMarkDownChange} />
+                          onChange={this.handleOnChange} />
                     </Col>
                     <Col xs={12}>
                       <div className="markdown-body" style={{height:600,overflow:'auto',paddingLeft:40,paddingRigth:40}} dangerouslySetInnerHTML = {{ __html:HTML }}/>
                     </Col>
                   </Row>
-              </Modal>
+              </Modal> */}
             </Layout>
         )
     }
 
     init = () => {
-        let reqData={
-            start:0,
-            offset:9999
-        }
-        this.props.articleListAction(reqData);
-        this.props.labelListAction();
-        this.props.categoryListAction();
-
+        this.props.bannerList();
     };
 
-    resolveLabel = (nextLabelReducer) => {
-        if(nextLabelReducer.status == 1){
-            this.setState({
-                labelData:nextLabelReducer.data
-            });
-        }
-    };
-
-    resolveCategory = (nextCategoryReducer) => {
-        if(nextCategoryReducer.status == 1){
-            this.setState({
-                categoryData:nextCategoryReducer.data
-            });
-        }
-    };
-
-    resolveArticle = (ArticleReducer) => {
-        let {status, data, type, info} = ArticleReducer;
+    resolve = (BannerReducer) => {
+        let {status, data, type, info} = BannerReducer;
         //列表
-        if(status == 1 && type == types.ARTICLE_LIST){
+        if(status == 1 && type == types.BANNER_LIST){
             this.setState({
                 data:data
             })
         }
         //更新
-        if(type == types.ARTICLE_UPDATE){
+        if(type == types.HANDLE_BANNER){
             if(status == 1){
               this.setState({
                   visible:false,
@@ -208,7 +176,7 @@ class ArticleList extends Component {
             }
         }
         //删除
-        if(type == types.ARTICLE_DELETE){
+        if(type == types.BANNER_DELETE){
             if(status == 1){
                 this.init();
                 info && message.success(info);
@@ -219,57 +187,13 @@ class ArticleList extends Component {
     };
 
     
-    showEditConfirm = (record) => {
-        let {id,title,content,label,categoryId,category} = record;
-        let converter = new showdown.Converter();
-        let l = [];
-        for(let i in label){
-            let json = {};
-            json['key'] = label[i]['id'].toString();
-            json['label'] = label[i]['name'];
-            l.push(json);
-        }
+    showModal = (record={}) => {
+        console.log('showModal',record);
         this.setState({
             visible:true,
-            id:id,
-            title:title,
-            content:content,
-            HTML:converter.makeHtml(content),
-            label:l,
-            category:{key:categoryId,label:category}
+            ...record
         })
     }
-
-    handleMarkDownChange = (e) => {
-        let text = e.target.value;
-        let converter = new showdown.Converter();
-        let html = converter.makeHtml(text);
-        console.log('html',html);
-        this.setState({
-            content:text,
-            HTML:html
-        });
-    };
-
-    handleTitleChange = (e) => {
-        this.setState({
-            title:e.target.value
-        });
-    };
-
-    handleLabelChange = (value) => {
-        console.log('handleLabelChange',value);
-        this.setState({
-            label:value
-        })
-    };
-
-    handleCategoryChange = (value) => {
-        console.log('handleCategoryChange',value);
-        this.setState({
-            category:value
-        })
-    };
 
     handleOk = () => {
         this.setState({
@@ -294,8 +218,8 @@ class ArticleList extends Component {
     showDeleteConfirm = (record) => {
         console.log(record);
         Modal.confirm({
-            title: 'Are you sure delete this Article?',
-            content: 'In fact, it\'s just hidden. .',
+            title: '确定删除？',
+            content: 'CATION:将彻底移除该数据.',
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
@@ -303,7 +227,7 @@ class ArticleList extends Component {
                 let reqData={
                     id:record.id
                 }
-                this.props.articleDeleteAction(reqData);
+                this.props.bannerDelete(reqData);
             },
             onCancel:() => {
               console.log('Cancel');
@@ -314,10 +238,8 @@ class ArticleList extends Component {
 }
 
 export default connect((state) => {
-    let { ArticleReducer,LabelReducer,CategoryReducer } = state;
+    let { BannerReducer } = state;
     return {
-        ArticleReducer,
-        LabelReducer,
-        CategoryReducer
+        BannerReducer
     };
-},{ articleListAction,articleUpdateAction,articleDeleteAction,labelListAction,categoryListAction })(ArticleList)
+},{ bannerList,handleBanner,bannerDelete })(Banner)
