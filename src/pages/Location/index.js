@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import showdown from 'showdown'
 import { Layout, Breadcrumb, Table, Row ,Col, Button,Divider,Modal,message,Select,Input,Tag } from 'antd';
 import * as types from '../../constants/ActionTypes';
-import {bannerList,handleBanner,bannerDelete} from '../../actions/BannerAction'
+import {locationList,handleLocation,locationDelete} from '../../actions/LocationAction'
 
 const { Content } = Layout;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-class Banner extends Component {
+class Location extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -18,11 +18,11 @@ class Banner extends Component {
             confirmLoading:false,
 
             id:'',
-            location:'',
+            name:'',
             type:'',
-            title:'',
-            url:'',
-            img:''
+            pre_name:'',
+            img:'',
+            hot:'',
         }
     }
 
@@ -31,12 +31,12 @@ class Banner extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.resolve(nextProps.BannerReducer);
+        this.resolve(nextProps.LocationReducer);
     }
 
 
     render(){
-        const {data,visible,confirmLoading, id,location,type,title,url,img} = this.state;
+        const {data,visible,confirmLoading, id,name,type,pre_name,img,hot} = this.state;
         //表格结构
         const columns = [
             {
@@ -67,27 +67,27 @@ class Banner extends Component {
                 )
             },{
                 title: '位置',
-                dataIndex: 'location',
-                key: 'location'
+                dataIndex: 'name',
+                key: 'name'
             },{
                 title: '类型',
                 dataIndex: 'type',
                 key: 'type'
             },{
-                title: '标题',
-                dataIndex: 'title',
-                key: 'title'
+                title: '省份',
+                dataIndex: 'pre_name',
+                key: 'pre_name'
             },{
-                title: '跳转链接',
-                dataIndex: 'url',
-                key: 'url'
+                title: '热门',
+                dataIndex: 'hot',
+                key: 'hot'
             }
         ]
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
                 <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
-                <Breadcrumb.Item>Banner</Breadcrumb.Item>
+                <Breadcrumb.Item>位置</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
                 <Row type="flex" justify="start" align="middle" style={{height:50}}>
@@ -124,10 +124,10 @@ class Banner extends Component {
                     <Col span={12}>
                         <Input
                             placeholder="位置"
-                            value={location}
+                            value={name}
                             onChange={(e)=>{
                                 this.setState({
-                                    location:e.target.value
+                                    name:e.target.value
                                 })
                             }} />
                     </Col>
@@ -138,7 +138,7 @@ class Banner extends Component {
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="类型：1为推荐阅读 2为目的地"
+                            placeholder="类型：1为目的地 2为景点"
                             value={type}
                             onChange={(e)=>{
                                 this.setState({
@@ -149,30 +149,30 @@ class Banner extends Component {
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>标题:</span>
+                        <span>省份:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="标题"
-                            value={title}
+                            placeholder="省份"
+                            value={pre_name}
                             onChange={(e)=>{
                                 this.setState({
-                                    title:e.target.value
+                                    pre_name:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>跳转链接:</span>
+                        <span>热门:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="跳转链接"
-                            value={url}
+                            placeholder="热门: 0为非热门 1为热门 "
+                            value={hot}
                             onChange={(e)=>{
                                 this.setState({
-                                    url:e.target.value
+                                    hot:e.target.value
                                 })
                             }} />
                     </Col>
@@ -184,19 +184,19 @@ class Banner extends Component {
     }
 
     init = () => {
-        this.props.bannerList();
+        this.props.locationList();
     };
 
-    resolve = (BannerReducer) => {
-        let {status, data, type, info} = BannerReducer;
+    resolve = (LocationReducer) => {
+        let {status, data, type, info} = LocationReducer;
         //列表
-        if(status == 1 && type == types.BANNER_LIST){
+        if(status == 1 && type == types.LOCATION_LIST){
             this.setState({
                 data:data
             })
         }
         //更新
-        if(type == types.HANDLE_BANNER){
+        if(type == types.HANDLE_LOCATION){
             if(status == 1){
               this.setState({
                   visible:false,
@@ -210,7 +210,7 @@ class Banner extends Component {
             }
         }
         //删除
-        if(type == types.BANNER_DELETE){
+        if(type == types.LOCATION_DELETE){
             if(status == 1){
                 this.init();
                 info && message.success(info);
@@ -243,8 +243,9 @@ class Banner extends Component {
         const {data,visible,confirmLoading, ...otherData} = this.state;
         let reqData = {
             ...otherData
+            
         }
-        this.props.handleBanner(reqData);
+        this.props.handleLocation(reqData);
     }
 
     handleCancel = () => {
@@ -252,11 +253,11 @@ class Banner extends Component {
             visible:false,
 
             id:'',
-            location:'',
+            name:'',
             type:'',
-            title:'',
-            url:'',
-            img:''
+            pre_name:'',
+            img:'',
+            hot:'',
         })
     }
 
@@ -272,7 +273,7 @@ class Banner extends Component {
                 let reqData={
                     id:record.id
                 }
-                this.props.bannerDelete(reqData);
+                this.props.locationDelete(reqData);
             },
             onCancel:() => {
               console.log('Cancel');
@@ -283,8 +284,8 @@ class Banner extends Component {
 }
 
 export default connect((state) => {
-    let { BannerReducer } = state;
+    let { LocationReducer } = state;
     return {
-        BannerReducer
+        LocationReducer
     };
-},{ bannerList,handleBanner,bannerDelete })(Banner)
+},{ locationList,handleLocation,locationDelete })(Location)

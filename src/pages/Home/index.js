@@ -3,9 +3,15 @@ import { connect } from 'react-redux'
 import { Layout, Menu, Breadcrumb, Icon,Button } from 'antd';
 import * as types from '../../constants/ActionTypes';
 import Banner from '../Banner'
+import Location from '../Location'
+
 import {logoutAction} from '../../actions/LoginAction'
 import File from '../File'
 import './style.scss';
+import QuickKnow from '../QuickKnow';
+import Reply from '../Reply';
+import Route from '../Route';
+import Travel from '../Travel';
 
 const SubMenu = Menu.SubMenu;
 const { Header, Sider, Content } = Layout;
@@ -41,7 +47,22 @@ class Home extends Component{
             case '2':
                 jsx = <Banner setState={this._setState}/>;
                 break;
+            case '3':
+                jsx = <Location setState={this._setState}/>;
+                break;
             case '4':
+                jsx = <QuickKnow setState={this._setState}/>;
+                break;
+            case '5':
+                jsx = <Reply setState={this._setState}/>;
+                break;
+            case '6':
+                jsx = <Route setState={this._setState}/>;
+                break;
+            case '7':
+                jsx = <Travel setState={this._setState}/>;
+                break;
+            case '10':
                 jsx = <File setState={this._setState}/>;
                 break;
             default:
@@ -76,11 +97,36 @@ class Home extends Component{
                           </Menu.Item>
 
                           <Menu.Item key="2">
-                            <Icon type="appstore" />
+                            <Icon type="book" />
                             <span>Banner</span>
                           </Menu.Item>
 
+                          <Menu.Item key="3">
+                            <Icon type="appstore" />
+                            <span>位置</span>
+                          </Menu.Item>
+
                           <Menu.Item key="4">
+                            <Icon type="bulb" />
+                            <span>快速了解</span>
+                          </Menu.Item>
+
+                          <Menu.Item key="5">
+                            <Icon type="smile" />
+                            <span>回复</span>
+                          </Menu.Item>
+
+                          <Menu.Item key="6">
+                            <Icon type="rocket" />
+                            <span>行程路线</span>
+                          </Menu.Item>
+
+                          <Menu.Item key="7">
+                            <Icon type="alert" />
+                            <span>旅游攻略</span>
+                          </Menu.Item>
+
+                          <Menu.Item key="10">
                             <Icon type="file" />
                             <span>文件</span>
                           </Menu.Item>

@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import showdown from 'showdown'
 import { Layout, Breadcrumb, Table, Row ,Col, Button,Divider,Modal,message,Select,Input,Tag } from 'antd';
 import * as types from '../../constants/ActionTypes';
-import {bannerList,handleBanner,bannerDelete} from '../../actions/BannerAction'
+import {replyList,handleReply,replyDelete} from '../../actions/ReplyAction'
 
 const { Content } = Layout;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-class Banner extends Component {
+class Reply extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -18,11 +18,11 @@ class Banner extends Component {
             confirmLoading:false,
 
             id:'',
-            location:'',
-            type:'',
-            title:'',
-            url:'',
-            img:''
+            user_avatar:'',
+            user_name:'',
+            openid:'',
+            travel_id:'',
+            content:'',
         }
     }
 
@@ -31,12 +31,12 @@ class Banner extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.resolve(nextProps.BannerReducer);
+        this.resolve(nextProps.ReplyReducer);
     }
 
 
     render(){
-        const {data,visible,confirmLoading, id,location,type,title,url,img} = this.state;
+        const {data,visible,confirmLoading, id,user_avatar,user_name,openid,travel_id,content} = this.state;
         //表格结构
         const columns = [
             {
@@ -56,38 +56,39 @@ class Banner extends Component {
                 dataIndex: 'id',
                 key: 'id'
             },{
-                title: '图片',
-                dataIndex: 'img',
-                key: 'img',
+                title: '用户名',
+                dataIndex: 'user_name',
+                key: 'user_name',
                 render: (text, record) => (
-                    !!text?
-                    <img src={text} style={{height:'80px',width:'100px'}}/>
-                    :
-                    null
+                    <span>{text || '匿名用户'}</span>
                 )
             },{
-                title: '位置',
-                dataIndex: 'location',
-                key: 'location'
+                title: '头像',
+                dataIndex: 'user_avatar',
+                key: 'user_avatar',
+                render: (text, record) => (
+                    <img src={text || 'http://zefey.com/file/1581578380981.png'} style={{height:'80px',width:'80px'}}/>
+                )
             },{
-                title: '类型',
-                dataIndex: 'type',
-                key: 'type'
+                title: '微信openid',
+                dataIndex: 'openid',
+                key: 'openid'
             },{
-                title: '标题',
-                dataIndex: 'title',
-                key: 'title'
+                title: '旅游记录id',
+                dataIndex: 'travel_id',
+                key: 'travel_id'
             },{
-                title: '跳转链接',
-                dataIndex: 'url',
-                key: 'url'
+                title: '评论内容',
+                dataIndex: 'content',
+                key: 'content',
+                width:400,
             }
         ]
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
                 <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
-                <Breadcrumb.Item>Banner</Breadcrumb.Item>
+                <Breadcrumb.Item>回复</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
                 <Row type="flex" justify="start" align="middle" style={{height:50}}>
@@ -104,75 +105,75 @@ class Banner extends Component {
                 onCancel={this.handleCancel}>
                 <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>图片:</span>
+                        <span>头像:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="图片"
-                            value={img}
+                            placeholder="头像"
+                            value={user_avatar}
                             onChange={(e)=>{
                                 this.setState({
-                                    img:e.target.value
+                                    user_avatar:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>位置:</span>
+                        <span>用户名:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="位置"
-                            value={location}
+                            placeholder="用户名"
+                            value={user_name}
                             onChange={(e)=>{
                                 this.setState({
-                                    location:e.target.value
+                                    user_name:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>类型:</span>
+                        <span>微信openid:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="类型：1为推荐阅读 2为目的地"
-                            value={type}
+                            placeholder="微信openid"
+                            value={openid}
                             onChange={(e)=>{
                                 this.setState({
-                                    type:e.target.value
+                                    openid:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>标题:</span>
+                        <span>旅游记录id:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="标题"
-                            value={title}
+                            placeholder="旅游记录id"
+                            value={travel_id}
                             onChange={(e)=>{
                                 this.setState({
-                                    title:e.target.value
+                                    travel_id:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>跳转链接:</span>
+                        <span>回复内容:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="跳转链接"
-                            value={url}
+                            placeholder="回复内容"
+                            value={content}
                             onChange={(e)=>{
                                 this.setState({
-                                    url:e.target.value
+                                    content:e.target.value
                                 })
                             }} />
                     </Col>
@@ -184,19 +185,19 @@ class Banner extends Component {
     }
 
     init = () => {
-        this.props.bannerList();
+        this.props.replyList();
     };
 
-    resolve = (BannerReducer) => {
-        let {status, data, type, info} = BannerReducer;
+    resolve = (ReplyReducer) => {
+        let {status, data, type, info} = ReplyReducer;
         //列表
-        if(status == 1 && type == types.BANNER_LIST){
+        if(status == 1 && type == types.REPLY_LIST){
             this.setState({
                 data:data
             })
         }
         //更新
-        if(type == types.HANDLE_BANNER){
+        if(type == types.HANDLE_REPLY){
             if(status == 1){
               this.setState({
                   visible:false,
@@ -210,7 +211,7 @@ class Banner extends Component {
             }
         }
         //删除
-        if(type == types.BANNER_DELETE){
+        if(type == types.REPLY_DELETE){
             if(status == 1){
                 this.init();
                 info && message.success(info);
@@ -243,8 +244,9 @@ class Banner extends Component {
         const {data,visible,confirmLoading, ...otherData} = this.state;
         let reqData = {
             ...otherData
+            
         }
-        this.props.handleBanner(reqData);
+        this.props.handleReply(reqData);
     }
 
     handleCancel = () => {
@@ -252,11 +254,11 @@ class Banner extends Component {
             visible:false,
 
             id:'',
-            location:'',
-            type:'',
-            title:'',
-            url:'',
-            img:''
+            user_avatar:'',
+            user_name:'',
+            openid:'',
+            travel_id:'',
+            content:'',
         })
     }
 
@@ -272,7 +274,7 @@ class Banner extends Component {
                 let reqData={
                     id:record.id
                 }
-                this.props.bannerDelete(reqData);
+                this.props.replyDelete(reqData);
             },
             onCancel:() => {
               console.log('Cancel');
@@ -283,8 +285,8 @@ class Banner extends Component {
 }
 
 export default connect((state) => {
-    let { BannerReducer } = state;
+    let { ReplyReducer } = state;
     return {
-        BannerReducer
+        ReplyReducer
     };
-},{ bannerList,handleBanner,bannerDelete })(Banner)
+},{ replyList,handleReply,replyDelete })(Reply)
