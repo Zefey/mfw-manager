@@ -12,6 +12,7 @@ import QuickKnow from '../QuickKnow';
 import Reply from '../Reply';
 import Route from '../Route';
 import Travel from '../Travel';
+import Scenic from '../Scenic';
 
 const SubMenu = Menu.SubMenu;
 const { Header, Sider, Content } = Layout;
@@ -61,6 +62,9 @@ class Home extends Component{
                 break;
             case '7':
                 jsx = <Travel setState={this._setState}/>;
+                break;
+            case '8':
+                jsx = <Scenic setState={this._setState}/>;
                 break;
             case '10':
                 jsx = <File setState={this._setState}/>;
@@ -124,6 +128,11 @@ class Home extends Component{
                           <Menu.Item key="7">
                             <Icon type="alert" />
                             <span>旅游攻略</span>
+                          </Menu.Item>
+
+                          <Menu.Item key="8">
+                            <Icon type="robot" />
+                            <span>景点</span>
                           </Menu.Item>
 
                           <Menu.Item key="10">

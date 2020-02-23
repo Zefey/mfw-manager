@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux'
 import { Layout, Breadcrumb, Table, Row ,Col, Button,Divider,Modal,message,Select,Input,Tag } from 'antd';
 import * as types from '../../constants/ActionTypes';
-import {bannerList,handleBanner,bannerDelete} from '../../actions/BannerAction'
+import {scenicList,handleScenic,scenicDelete} from '../../actions/ScenicAction'
 
 const { Content } = Layout;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-class Banner extends Component {
+class Scenic extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -17,11 +17,14 @@ class Banner extends Component {
             confirmLoading:false,
 
             id:'',
+            img:'',
             location:'',
-            type:'',
-            title:'',
-            url:'',
-            img:''
+            name:'',
+            tags:'',
+            latitude:'',
+            longitude:'',
+            openTime:'',
+            content:'',
         }
     }
 
@@ -30,12 +33,12 @@ class Banner extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.resolve(nextProps.BannerReducer);
+        this.resolve(nextProps.ScenicReducer);
     }
 
 
     render(){
-        const {data,visible,confirmLoading, id,location,type,title,url,img} = this.state;
+        const {data,visible,confirmLoading, id,img,location,name,tags,latitude,longitude,openTime,content} = this.state;
         //表格结构
         const columns = [
             {
@@ -69,30 +72,43 @@ class Banner extends Component {
                 dataIndex: 'location',
                 key: 'location'
             },{
-                title: '类型',
-                dataIndex: 'type',
-                key: 'type'
+                title: '景点名',
+                dataIndex: 'name',
+                key: 'name'
             },{
-                title: '标题',
-                dataIndex: 'title',
-                key: 'title'
+                title: '景点标签',
+                dataIndex: 'tags',
+                key: 'tags'
             },{
-                title: '跳转链接',
-                dataIndex: 'url',
-                key: 'url'
-            }
+                title: '景点纬度',
+                dataIndex: 'latitude',
+                key: 'latitude'
+            },{
+                title: '景点经度',
+                dataIndex: 'longitude',
+                key: 'longitude'
+            },{
+                title: '开放时间',
+                dataIndex: 'openTime',
+                key: 'openTime'
+            },{
+                title: '景点描述',
+                dataIndex: 'content',
+                key: 'content',
+                width:400,
+            },
         ]
         return(
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
                 <Breadcrumb.Item>马蜂窝</Breadcrumb.Item>
-                <Breadcrumb.Item>Banner</Breadcrumb.Item>
+                <Breadcrumb.Item>位置</Breadcrumb.Item>
               </Breadcrumb>
               <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 560 }}>
                 <Row type="flex" justify="start" align="middle" style={{height:50}}>
                     <Button type="primary" onClick={this.showModal}>添加数据</Button>
                   </Row>
-                <Table rowKey={record => record.id} columns={columns} dataSource={data} />
+                <Table rowKey={record => record.id} columns={columns} dataSource={data} scroll={{x:true}}/>
               </Content>
               <Modal
                 title={id ? '编辑数据':'新增数据'}
@@ -133,45 +149,90 @@ class Banner extends Component {
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>类型:</span>
+                        <span>景点名:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="类型：1为推荐阅读 2为目的地"
-                            value={type}
+                            placeholder="景点名"
+                            value={name}
                             onChange={(e)=>{
                                 this.setState({
-                                    type:e.target.value
+                                    name:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>标题:</span>
+                        <span>景点标签:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="标题"
-                            value={title}
+                            placeholder="景点标签"
+                            value={tags}
                             onChange={(e)=>{
                                 this.setState({
-                                    title:e.target.value
+                                    tags:e.target.value
                                 })
                             }} />
                     </Col>
                   </Row>
                   <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
                     <Col span={4} align="center">
-                        <span>跳转链接:</span>
+                        <span>景点纬度:</span>
                     </Col>
                     <Col span={12}>
                         <Input
-                            placeholder="跳转链接"
-                            value={url}
+                            placeholder="景点纬度"
+                            value={latitude}
                             onChange={(e)=>{
                                 this.setState({
-                                    url:e.target.value
+                                    latitude:e.target.value
+                                })
+                            }} />
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
+                    <Col span={4} align="center">
+                        <span>景点经度:</span>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            placeholder="景点经度"
+                            value={longitude}
+                            onChange={(e)=>{
+                                this.setState({
+                                    longitude:e.target.value
+                                })
+                            }} />
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
+                    <Col span={4} align="center">
+                        <span>开放时间:</span>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            placeholder="开放时间"
+                            value={openTime}
+                            onChange={(e)=>{
+                                this.setState({
+                                    openTime:e.target.value
+                                })
+                            }} />
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="start" align="middle" gutter={16} style={{ marginBottom:20}}>
+                    <Col span={4} align="center">
+                        <span>景点描述:</span>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            placeholder="景点描述"
+                            value={content}
+                            onChange={(e)=>{
+                                this.setState({
+                                    content:e.target.value
                                 })
                             }} />
                     </Col>
@@ -183,19 +244,19 @@ class Banner extends Component {
     }
 
     init = () => {
-        this.props.bannerList();
+        this.props.scenicList();
     };
 
-    resolve = (BannerReducer) => {
-        let {status, data, type, info} = BannerReducer;
+    resolve = (ScenicReducer) => {
+        let {status, data, type, info} = ScenicReducer;
         //列表
-        if(status == 1 && type == types.BANNER_LIST){
+        if(status == 1 && type == types.SCENIC_LIST){
             this.setState({
                 data:data
             })
         }
         //更新
-        if(type == types.HANDLE_BANNER){
+        if(type == types.HANDLE_SCENIC){
             if(status == 1){
               this.setState({
                   visible:false,
@@ -209,7 +270,7 @@ class Banner extends Component {
             }
         }
         //删除
-        if(type == types.BANNER_DELETE){
+        if(type == types.SCENIC_DELETE){
             if(status == 1){
                 this.init();
                 info && message.success(info);
@@ -242,8 +303,9 @@ class Banner extends Component {
         const {data,visible,confirmLoading, ...otherData} = this.state;
         let reqData = {
             ...otherData
+            
         }
-        this.props.handleBanner(reqData);
+        this.props.handleScenic(reqData);
     }
 
     handleCancel = () => {
@@ -251,11 +313,14 @@ class Banner extends Component {
             visible:false,
 
             id:'',
+            img:'',
             location:'',
-            type:'',
-            title:'',
-            url:'',
-            img:''
+            name:'',
+            tags:'',
+            latitude:'',
+            longitude:'',
+            openTime:'',
+            content:'',
         })
     }
 
@@ -271,7 +336,7 @@ class Banner extends Component {
                 let reqData={
                     id:record.id
                 }
-                this.props.bannerDelete(reqData);
+                this.props.scenicDelete(reqData);
             },
             onCancel:() => {
               console.log('Cancel');
@@ -282,8 +347,8 @@ class Banner extends Component {
 }
 
 export default connect((state) => {
-    let { BannerReducer } = state;
+    let { ScenicReducer } = state;
     return {
-        BannerReducer
+        ScenicReducer
     };
-},{ bannerList,handleBanner,bannerDelete })(Banner)
+},{ scenicList,handleScenic,scenicDelete })(Scenic)

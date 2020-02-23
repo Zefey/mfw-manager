@@ -31,6 +31,10 @@ const Config = {
     handleReply:base.baseURl + '/admin/handleReply',
     replyDelete:base.baseURl + '/admin/replyDelete',
 
+    scenicList:base.baseURl + '/admin/scenicList',
+    handleScenic:base.baseURl + '/admin/handleScenic',
+    scenicDelete:base.baseURl + '/admin/scenicDelete',
+
 };
 
 export default Config;

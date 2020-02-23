@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
-import showdown from 'showdown'
 import { Layout, Breadcrumb, Table, Row ,Col, Button,Divider,Modal,message,Select,Input,Tag } from 'antd';
 import * as types from '../../constants/ActionTypes';
 import {travelList,handleTravel,travelDelete} from '../../actions/TravelAction'

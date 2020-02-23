@@ -7,6 +7,7 @@ import QuickKnowReducer from './QuickKnowReducer'
 import ReplyReducer from './ReplyReducer'
 import RouteReducer from './RouteReducer'
 import TravelReducer from './TravelReducer'
+import ScenicReducer from './ScenicReducer'
 
 export default combineReducers({
     routing: routerReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
     ReplyReducer,
     RouteReducer,
     TravelReducer,
+    ScenicReducer,
 })

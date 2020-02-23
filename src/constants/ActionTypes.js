@@ -30,3 +30,8 @@ export const QUICK_KNOW_DELETE = 'QUICK_KNOW_DELETE';
 export const REPLY_LIST = 'REPLY_LIST';
 export const HANDLE_REPLY = 'HANDLE_REPLY';
 export const REPLY_DELETE = 'REPLY_DELETE';
+
+export const SCENIC_LIST = 'SCENIC_LIST';
+export const HANDLE_SCENIC = 'HANDLE_SCENIC';
+export const SCENIC_DELETE = 'SCENIC_DELETE';
+
